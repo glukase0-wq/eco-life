@@ -1,0 +1,61 @@
+body.light-theme {
+    background-color: #f4f9f4;
+    color: #333;
+}
+body.dark-theme {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+/* Header, footer, cards remain similar */
+header, footer {
+    transition: all 0.3s;
+}
+.card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
+/* Settings panel animation */
+#settings-panel {
+    position: fixed;
+    top: 0; right: -300px;
+    width: 280px;
+    height: 100%;
+    background: #4caf50;
+    color: white;
+    padding: 20px;
+    box-shadow: -4px 0 10px rgba(0,0,0,0.3);
+    transition: right 0.4s ease;
+    z-index: 1000;
+}
+#settings-panel.settings-open {
+    right: 0;
+}
+
+/* Button hover effect */
+button {
+    cursor: pointer;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2e7d32;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+button:hover {
+    background-color: #1b5e20;
+}
+
+/* Input field */
+#new-post {
+    width: 70%;
+    padding: 8px;
+    margin-right: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}

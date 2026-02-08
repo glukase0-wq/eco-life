@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eco-Life 🌱 | Environmental Awareness Platform</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<style>
+/* ================= GENERAL ================= */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Roboto',sans-serif;}
+html{scroll-behavior:smooth;}
+body.light-theme{background:#f4f9f4;color:#333;transition:.5s;}
+body.dark-theme{background:#121212;color:#e0e0e0;transition:.5s;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;}
+.card{background:rgba(255,255,255,0.9);padding:22px;margin-bottom:22px;border-radius:14px;box-shadow:0 6px 12px rgba(0,0,0,.15);transition:.3s;animation:fadeIn 1s forwards;}
+body.dark-theme .card{background:rgba(30,30,30,0.9);color:white;}
+@keyframes fadeIn{to{opacity:1;}}
+
+/* ================= BACKGROUND SLIDESHOW ================= */
+#bg-slideshow{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;overflow:hidden;}
+#bg-slideshow .slide{position:absolute;top:0;left:0;width:100%;height:100%;background-size:cover;background-position:center;opacity:0;transition:opacity 2s ease-in-out;}
+#bg-slideshow .slide.active{opacity:1;}
+
+/* ================= TOP SEARCH ================= */
+#top-search{position:fixed;top:10px;left:50%;transform:translateX(-50%);width:80%;max-width:600px;display:flex;justify-content:center;align-items:center;backdrop-filter: blur(8px);background:rgba(255,255,255,0.3);border-radius:50px;padding:8px 12px;z-index:1000;box-shadow:0 4px 12px rgba(0,0,0,.1);transition: top 0.3s ease, background 0.5s;}
+#top-search input{width:70%;padding:10px 15px;border:none;border-radius:50px;outline:none;background:rgba(255,255,255,0.7);}
+#top-search button{padding:10px 15px;margin-left:10px;border:none;border-radius:50px;background:#4caf50;color:white;transition:.3s;}
+#top-search button:hover{background:#388e3c;}
+
+/* ================= SETTINGS ================= */
+#settings-panel{position:fixed;top:0;right:-320px;width:300px;height:100%;background:#2e7d32;color:white;padding:20px;transition:right .4s ease;z-index:1000;}
+#settings-panel.settings-open{right:0;}
+#settings-panel h3{margin-bottom:15px;}
+#settings-panel label{display:block;margin:10px 0;cursor:pointer;}
+#close-settings{margin-top:15px;padding:8px;border:none;border-radius:5px;background:#145214;color:white;}
+
+/* ================= MAIN ================= */
+main{max-width:1200px;margin:100px auto 20px auto;padding:0 15px;}
+
+/* ================= EDUCATION ================= */
+.education-cards{display:flex;flex-wrap:wrap;gap:18px;margin-top:15px;justify-content:center;}
+.education-card{flex:1 1 30%;padding:15px;border-radius:12px;text-align:center;cursor:pointer;transition:.3s;position:relative;background:rgba(255,255,255,0.95);}
+.education-card img{width:100%;height:150px;object-fit:cover;border-radius:10px;margin-bottom:10px;}
+.education-card:hover{transform:translateY(-5px);box-shadow:0 12px 18px rgba(0,0,0,.2);}
+body.dark-theme .education-card{background:rgba(30,30,30,0.95);color:white;}
+
+/* Info overlay */
+#education-info-overlay {
+  position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:10000;
+}
+#education-info-overlay .info-content {
+  background:white;color:black;padding:20px;border-radius:10px;width:70%;max-width:600px;max-height:80%;overflow-y:auto;position:relative;
+}
+#education-info-overlay .close-info {
+  position:absolute;top:10px;right:10px;background:#4caf50;color:white;border:none;border-radius:6px;padding:6px 10px;cursor:pointer;
+}
+body.dark-theme #education-info-overlay .info-content {background:#333;color:white;}
+
+/* ================= STREAM ================= */
+#stream-history{list-style:none;padding-left:0;font-size:14px;max-height:250px;overflow-y:auto;}
+
+/* ================= CHARTS ================= */
+.chart-container{margin-top:20px;}
+
+/* ================= INTERACTIVE MAP ================= */
+#interactive-map-section{margin-top:30px;}
+#interactive-map{display:none;width:100%;height:500px;border-radius:12px;overflow:hidden;position:relative;}
+#map-search{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:2000;width:60%;display:flex;}
+#map-search input{flex:1;padding:8px 12px;border-radius:50px;border:none;outline:none;backdrop-filter: blur(8px);background:rgba(255,255,255,0.7);}
+#map-search button{padding:8px 15px;margin-left:8px;border:none;border-radius:50px;background:#4caf50;color:white;}
+
+/* ================= COMMUNICATION ================= */
+#communication .post{background:#d9f2d9;padding:10px;border-radius:8px;margin-bottom:10px;transition:.3s;}
+body.dark-theme #communication .post{background:#2c2c2c;}
+#new-post{width:70%;padding:8px;border-radius:5px;border:1px solid #ccc;margin-top:10px;}
+#post-btn{padding:8px 12px;border:none;border-radius:5px;background:#2e7d32;color:white;margin-left:5px;}
+
+/* ================= FOOTER ================= */
+footer{background:#4caf50;color:white;text-align:center;padding:14px;margin-top:25px;}
+
+/* ================= AI ASSISTANT SIDEBAR ================= */
+#assistant-toggle {
+  position:fixed;bottom:20px;right:20px;padding:12px 16px;border:none;border-radius:50%;background:#4caf50;color:white;font-size:18px;z-index:1000;box-shadow:0 4px 8px rgba(0,0,0,0.2);
+}
+#assistant-sidebar {
+  position:fixed;top:0;right:-25%;width:25%;height:100%;background:#2e7d32;color:white;padding:20px;transition:right 0.4s ease;z-index:999;
+}
+
+/* ================= RESPONSIVE ================= */
+@media(max-width:768px){
+  .education-cards{flex-direction:column;}
+  .chart-container canvas{width:100%!important;height:auto!important;}
+  #assistant-sidebar{width:80%;right:-80%;}
+}
+</style>
+</head>
+<body class="light-theme">
+
+<!-- ================= BACKGROUND SLIDESHOW ================= -->
+<div id="bg-slideshow">
+  <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80');"></div>
+  <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1600&q=80');"></div>
+  <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1529429617124-22a76169b0a1?auto=format&fit=crop&w=1600&q=80');"></div>
+  <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1497493292307-31c376b6e479?auto=format&fit=crop&w=1600&q=80');"></div>
+</div>
+
+<!-- TOP SEARCH BAR -->
+<div id="top-search">
+  <input type="text" id="location-search" placeholder="Enter city for live weather...">
+  <button id="search-btn"><i class="fas fa-search"></i></button>
+  <button id="settings-btn"><i class="fas fa-cog"></i></button>
+</div>
+
+<!-- SETTINGS PANEL -->
+<aside id="settings-panel">
+  <h3>Settings</h3>
+  <label><input type="checkbox" id="toggle-theme"> Dark Mode</label>
+  <label><input type="checkbox" id="toggle-stream" checked> Show Live Updates</label>
+  <button id="close-settings">Close</button>
+</aside>
+
+<main>
+
+<!-- WEATHER SECTION -->
+<section id="weather" class="card">
+<h2>🌦️ Weather & Climate Awareness</h2>
+<div class="education-card">
+  <div id="temperature" style="font-size:40px;font-weight:bold;">--°C</div>
+  <div id="conditions">Loading weather...</div>
+  <div id="location">Your City</div>
+</div>
+</section>
+
+<!-- EDUCATION SECTION -->
+<section id="education" class="card">
+<h2>📘 Environmental & Farming Education</h2>
+<input type="text" id="topic-search-input" placeholder="Search topics..." style="width:100%;padding:8px;margin-bottom:12px;border-radius:6px;border:1px solid #ccc;">
+<div class="education-cards" id="education-cards">
+
+<!-- Sustainable Farming -->
+<div class="education-card" data-topic="sustainable-farming">
+<img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=600&q=60" alt="Sustainable Farming">
+<h3>Sustainable Farming</h3>
+<p>Learn crop rotation, organic fertilization, and soil-friendly methods for healthy yields.</p>
+</div>
+
+<!-- Trees & Vegetation -->
+<div class="education-card" data-topic="trees-vegetation">
+<img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=600&q=60" alt="Trees & Vegetation">
+<h3>Trees & Vegetation</h3>
+<p>Understand tree planting, urban greenery, and native plants to restore ecosystems.</p>
+</div>
+
+<!-- Waste Disposal -->
+<div class="education-card" data-topic="waste-disposal">
+<img src="https://images.unsplash.com/photo-1581091012184-8d4a5f5f6f7c?auto=format&fit=crop&w=600&q=80" alt="Waste Disposal">
+<h3>Waste Disposal</h3>
+<p>Reduce, Reuse, Recycle! Learn composting, safe disposal, and creative upcycling tips.</p>
+</div>
+
+<!-- Climate Change -->
+<div class="education-card" data-topic="climate-change">
+<img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80" alt="Climate Change">
+<h3>Climate Change Awareness</h3>
+<p>Discover the impact of global warming, carbon footprints, and how to act locally.</p>
+</div>
+
+<!-- Water Conservation -->
+<div class="education-card" data-topic="water-conservation">
+<img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Water Conservation">
+<h3>Water Conservation</h3>
+<p>Practical methods to save water at home, farms, and communities.</p>
+</div>
+
+<!-- Renewable Energy -->
+<div class="education-card" data-topic="renewable-energy">
+<img src="https://images.unsplash.com/photo-1509395176047-4a66953fd231?auto=format&fit=crop&w=600&q=80" alt="Renewable Energy">
+<h3>Renewable Energy</h3>
+<p>Learn solar, wind, and bioenergy solutions for a sustainable future.</p>
+</div>
+
+</div>
+</section>
+
+<!-- LIVE STREAM -->
+<section id="eco-stream" class="card">
+<h2>📡 Live Environment & Farming Updates</h2>
+<div class="education-card">
+<h3>Latest Update</h3>
+<p id="live-stream-text">Loading...</p>
+</div>
+<div class="education-card">
+<h3>Update History</h3>
+<ul id="stream-history"></ul>
+</div>
+</section>
+
+<!-- CHARTS -->
+<section id="charts" class="card">
+<h2>📊 Environmental & Weather Data Charts</h2>
+<div class="chart-container">
+<canvas id="ecoChart"></canvas>
+</div>
+</section>
+
+<!-- INTERACTIVE MAP -->
+<section id="interactive-map-section" class="card">
+<button id="toggle-map" style="padding:10px 15px;border:none;border-radius:8px;background:#4caf50;color:white;margin-bottom:10px;">
+  🌐 Show Full Interactive Map
+</button>
+
+<div id="interactive-map">
+<div id="map-search">
+  <input type="text" id="map-location-search" placeholder="Search location (e.g., Kenya)">
+  <button id="map-search-btn"><i class="fas fa-search"></i></button>
+</div>
+<iframe id="map-frame" src="https://embed.windyty.com/?lat=-1.2921&lon=36.8219&zoom=6&level=surface&overlay=wind&menu=true" 
+        style="width:100%;height:100%;border:none;border-radius:12px;"></iframe>
+</div>
+</section>
+
+<!-- COMMUNICATION -->
+<section id="communication" class="card">
+<h2>💬 Community Discussions</h2>
+<div id="discussion-posts">
+<div class="post">🌱 Farmer Tip: Rotate crops to maintain soil health.</div>
+<div class="post">📚 Student Idea: Organize a local clean-up event.</div>
+</div>
+<input type="text" id="new-post" placeholder="Share your idea..." />
+<button id="post-btn"><i class="fas fa-paper-plane"></i></button>
+</section>
+
+<!-- EDUCATION INFO OVERLAY -->
+<div id="education-info-overlay">
+  <div class="info-content">
+    <button class="close-info">Close</button>
+    <div id="info-text"></div>
+  </div>
+</div>
+
+<!-- AI Assistant Sidebar -->
+<button id="assistant-toggle"><i class="fas fa-robot"></i></button>
+<div id="assistant-sidebar">
+<h3>🤖 Eco-Life Assistant</h3>
+<input type="text" id="assistant-input-sidebar" placeholder="Ask anything..." style="width:100%;padding:8px;border-radius:6px;border:none;margin-bottom:10px;">
+<button id="assistant-btn-sidebar" style="padding:8px 12px;border:none;border-radius:6px;background:#4caf50;color:white;width:100%;">Ask</button>
+<div id="assistant-response-sidebar" style="margin-top:12px;background:rgba(76,175,80,0.1);color:black;padding:10px;border-radius:6px;min-height:40px;"></div>
+<button id="assistant-close-sidebar" style="margin-top:15px;padding:6px 10px;border:none;border-radius:6px;background:#145214;color:white;width:100%;">Close</button>
+</div>
+
+</main>
+
+<footer>
+Eco-Life © 2026 | Made for farmers & students
+</footer>
+
+<script>
+// ================== BACKGROUND SLIDESHOW ==================
+const slides=document.querySelectorAll("#bg-slideshow .slide");
+let currentSlide=0;slides[currentSlide].classList.add("active");
+setInterval(()=>{slides[currentSlide].classList.remove("active");currentSlide=(currentSlide+1)%slides.length;slides[currentSlide].classList.add("active");},8000);
+
+// ================= SETTINGS =================
+const panel=document.getElementById("settings-panel");
+const closeBtn=document.getElementById("close-settings");
+const toggleTheme=document.getElementById("toggle-theme");
+const toggleStream=document.getElementById("toggle-stream");
+const settingsBtn=document.getElementById("settings-btn");
+if(localStorage.getItem("eco-theme")==="dark"){document.body.classList.add("dark-theme");toggleTheme.checked=true;}
+else{document.body.classList.add("light-theme");toggleTheme.checked=false;}
+settingsBtn.onclick=()=>panel.classList.toggle("settings-open");
+closeBtn.onclick=()=>panel.classList.remove("settings-open");
+toggleTheme.onchange=()=>{document.body.classList.toggle("dark-theme",toggleTheme.checked);document.body.classList.toggle("light-theme",!toggleTheme.checked);localStorage.setItem("eco-theme", toggleTheme.checked?"dark":"light");};
+toggleStream.onchange=()=>document.getElementById("eco-stream").style.display=toggleStream.checked?"block":"none";
+
+// ================= LIVE STREAM =================
+const tips=["🌦️ Weather Tip: Monitor rainfall patterns.","🌱 Farming Tip: Compost improves soil health.","🌍 Environment Tip: Reduce plastic waste.","📜 History: Ancient civilizations practiced sustainable farming.","🌳 Tree Tip: Plant native trees for better survival rates.","💧 Water Tip: Drip irrigation saves water."];
+let i=0;
+const liveText=document.getElementById("live-stream-text");
+const history=document.getElementById("stream-history");
+function updateStream(){const msg=tips[i];const time=new Date().toLocaleTimeString();liveText.innerText=msg;const li=document.createElement("li");li.innerText=`[${time}] ${msg}`;history.prepend(li);if(history.children.length>12) history.removeChild(history.lastChild);i=(i+1)%tips.length;}
+setInterval(updateStream,5000);
+updateStream();
+
+// ================= CHARTS =================
+const ctx=document.getElementById("ecoChart").getContext("2d");
+const ecoChart=new Chart(ctx,{type:"line",data:{labels:["Jan","Feb","Mar","Apr","May","Jun"],datasets:[{label:"Rainfall (mm)",data:[45,60,75,30,50,80],borderColor:"#4caf50",backgroundColor:"rgba(76,175,80,0.2)"},{label:"Avg Temp (°C)",data:[22,24,25,23,26,27],borderColor:"#ff9800",backgroundColor:"rgba(255,152,0,0.2)"}]},options:{responsive:true}});
+
+// ================= MAP =================
+const toggleMap=document.getElementById("toggle-map");
+const map=document.getElementById("interactive-map");
+toggleMap.onclick=()=>map.style.display=map.style.display==="block"?"none":"block";
+
+// ================= EDUCATION CARD INFO =================
+const infoOverlay=document.getElementById("education-info-overlay");
+const infoText=document.getElementById("info-text");
+const closeInfo=document.querySelector("#education-info-overlay .close-info");
+document.querySelectorAll(".education-card").forEach(card=>{card.addEventListener("click",()=>{const topic=card.dataset.topic;let infoContent="";switch(topic){
+case"sustainable-farming":infoContent=`<h3>Sustainable Farming</h3><img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=600&q=60" style="width:100%;border-radius:8px;margin-bottom:10px;"><p>Crop rotation, organic fertilizers, and eco-friendly pest control methods help maintain healthy soil and high yields.</p>`;break;
+case"trees-vegetation":infoContent=`<h3>Trees & Vegetation</h3><img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=600&q=60" style="width:100%;border-radius:8px;margin-bottom:10px;"><p>Plant native trees, maintain urban greenery, and support ecosystems to restore environmental balance.</p>`;break;
+case"waste-disposal":infoContent=`<h3>Waste Disposal</h3><img src="https://images.unsplash.com/photo-1581091012184-8d4a5f5f6f7c?auto=format&fit=crop&w=600&q=80" style="width:100%;border-radius:8px;margin-bottom:10px;"><p>Reduce, Reuse, Recycle. Compost organic waste, safely dispose hazardous materials, and upcycle creatively.</p>`;break;
+case"climate-change":infoContent=`<h3>Climate Change Awareness</h3><img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80" style="width:100%;border-radius:8px;margin-bottom:10px;"><p>Understand global warming effects, carbon footprints, and local actions to mitigate climate change.</p>`;break;
+case"water-conservation":infoContent=`<h3>Water Conservation</h3><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" style="width:100%;border-radius:8px;margin-bottom:10px;"><p>Save water at home, in agriculture, and communities using simple, practical methods like drip irrigation.</p>`;break;
+case"renewable-energy":infoContent=`<h3>Renewable Energy</h3><img src="https://images.unsplash.com/photo-1509395176047-4a66953fd231?auto=format&fit=crop&w=600&q=80" style="width:100%;border-radius:8px;margin-bottom:10px;"><p>Solar, wind, and bioenergy solutions help reduce fossil fuel dependence and protect the planet.</p>`;break;}infoText.innerHTML=infoContent;infoOverlay.style.display="flex";});});
+closeInfo.onclick=()=>infoOverlay.style.display="none";
+
+// ================= AI ASSISTANT SIDEBAR =================
+const assistantBtn=document.getElementById("assistant-toggle");
+const assistantSidebar=document.getElementById("assistant-sidebar");
+const assistantClose=document.getElementById("assistant-close-sidebar");
+const assistantBtnSidebar=document.getElementById("assistant-btn-sidebar");
+const assistantInputSidebar=document.getElementById("assistant-input-sidebar");
+const assistantResponseSidebar=document.getElementById("assistant-response-sidebar");
+assistantBtn.onclick=()=>assistantSidebar.style.right="0";
+assistantClose.onclick=()=>assistantSidebar.style.right="-25%";
+assistantBtnSidebar.onclick=()=>{const question=assistantInputSidebar.value.trim();if(!question)return;assistantResponseSidebar.innerText="🤖 Processing...";setTimeout(()=>{assistantResponseSidebar.innerText=`🤖 Quick Tip about "${question}": Focus on sustainable practices and eco-friendly solutions! 🌱`;},800);};
+</script>
+</body>
+</html>

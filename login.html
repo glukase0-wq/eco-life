@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eco‑Life | Environmental Login & Awareness</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ===== GLOBAL ===== */
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Roboto',sans-serif; }
+  body { background:#fafafa; color:#333; }
+
+  a { text-decoration:none; color: inherit; }
+
+  button { cursor:pointer; }
+
+  .container { padding: 0 20px; max-width:1200px; margin:auto; }
+
+  /* ===== HERO / PROMO SECTION ===== */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 720px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    overflow:hidden;
+    background:#000;
+  }
+  .hero img {
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    opacity:0;
+    transition: opacity 1.5s ease;
+  }
+  .hero img.active { opacity:1; }
+
+  .hero::before {
+    content:"";
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.5);
+  }
+
+  .hero-content {
+    position: relative;
+    text-align:center;
+    color:#fff;
+    z-index:10;
+    max-width:700px;
+  }
+  .hero-content h1 {
+    font-size:3rem;
+    font-weight:700;
+    margin-bottom:10px;
+    color:#4caf50;
+  }
+  .hero-content p {
+    font-size:1.3rem;
+    margin-bottom:25px;
+  }
+  .hero-buttons button {
+    padding:12px 25px;
+    margin:10px;
+    border:none;
+    border-radius:6px;
+    font-size:1rem;
+    font-weight:700;
+    color:#fff;
+    background:#4caf50;
+    transition: .3s;
+  }
+  .hero-buttons button:hover {
+    background:#388e3c;
+  }
+  .hero-buttons .login-btn { background:#2e7d32; }
+  .hero-buttons .login-btn:hover { background:#145214; }
+
+  .continue-guest {
+    display:block;
+    margin-top:10px;
+    font-size:0.9rem;
+    color:#fff;
+    text-decoration:underline;
+    cursor:pointer;
+  }
+
+  /* ===== ICON FEATURES ===== */
+  .features {
+    padding:60px 0;
+    text-align:center;
+  }
+  .features h2 {
+    font-size:2rem;
+    margin-bottom:20px;
+    color:#4caf50;
+  }
+  .feature-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    gap:30px;
+    margin-top:30px;
+  }
+  .feature-box {
+    background:#fff;
+    padding:25px;
+    border-radius:12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition:.3s;
+  }
+  .feature-box:hover { transform: translateY(-6px); }
+  .feature-box i {
+    font-size:2.4rem;
+    margin-bottom:15px;
+    color:#4caf50;
+  }
+  .feature-box h4 { margin-bottom:10px; font-weight:700; }
+
+  /* ===== FORM SECTION (modal handled) ===== */
+  .modal {
+    display:none;
+    position:fixed;
+    z-index:100;
+    left:0; top:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.75);
+    justify-content:center;
+    align-items:center;
+  }
+  .modal-content {
+    background:#121212;
+    color:#fff;
+    padding:30px;
+    border-radius:12px;
+    max-width:400px;
+    width:90%;
+    text-align:center;
+    position:relative;
+  }
+  .modal-content h2 {
+    color:#4caf50;
+    margin-bottom:20px;
+  }
+  .modal-content input {
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border:none;
+    border-radius:6px;
+    background:#1e1e1e;
+    color:#fff;
+    font-size:1rem;
+  }
+  .modal-content .btn {
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:6px;
+    font-size:1rem;
+    font-weight:700;
+    margin-top:8px;
+    background:#4caf50;
+    color:#fff;
+    transition:.3s;
+  }
+  .modal-content .btn:hover { background:#388e3c; }
+
+  .close-modal {
+    position:absolute;
+    top:12px;
+    right:15px;
+    font-size:1.2rem;
+    cursor:pointer;
+    color:#fff;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:768px) {
+    .hero-content h1 { font-size:2.6rem; }
+    .hero-content p { font-size:1.1rem; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- HERO PROMO -->
+<section class="hero">
+  <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80" class="active" alt="Agri Slide">
+  <img src="https://images.unsplash.com/photo-1581091012184-8d4a5f5f6f7c?auto=format&fit=crop&w=1600&q=80" alt="Agri Slide 2">
+  <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1600&q=80" alt="Agri Slide 3">
+
+  <div class="hero-content container">
+    <h1>Grow With Nature 🌱</h1>
+    <p>Join Eco‑Life — where sustainability meets community action and knowledge.</p>
+    <div class="hero-buttons">
+      <button class="login-btn" id="loginBtn">Log In</button>
+      <button id="signupBtn">Sign Up</button>
+    </div>
+    <span class="continue-guest" id="guestBtn">Continue as Guest</span>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features container">
+  <h2>Why Join Eco‑Life?</h2>
+  <div class="feature-grid">
+    <div class="feature-box">
+      <i class="fas fa-seedling"></i>
+      <h4>Sustainable Farming</h4>
+      <p>Learn eco‑friendly crop and soil practices.</p>
+    </div>
+    <div class="feature-box">
+      <i class="fas fa-tree"></i>
+      <h4>Forest & Trees</h4>
+      <p>Support reforestation and native planting programs.</p>
+    </div>
+    <div class="feature-box">
+      <i class="fas fa-water"></i>
+      <h4>Water Conservation</h4>
+      <p>Tips to save water at home and on the farm.</p>
+    </div>
+    <div class="feature-box">
+      <i class="fas fa-solar-panel"></i>
+      <h4>Renewable Energy</h4>
+      <p>Learn solar, wind & bioenergy solutions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL LOGIN/SIGNUP -->
+<div class="modal" id="authModal">
+  <div class="modal-content">
+    <span class="close-modal" id="closeModal">&times;</span>
+    <h2 id="modalTitle">Log In</h2>
+    <input type="text" placeholder="Username or Email" required>
+    <input type="password" placeholder="Password" required>
+    <button class="btn" id="modal-btn">Submit</button>
+  </div>
+</div>
+
+<!-- Font Awesome -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+
+<script>
+  // ===== IMAGE ROTATION =====
+  const heroImgs = document.querySelectorAll('.hero img');
+  let index = 0;
+  setInterval(() => {
+    heroImgs[index].classList.remove('active');
+    index = (index + 1) % heroImgs.length;
+    heroImgs[index].classList.add('active');
+  }, 4500);
+
+  // ===== MODAL LOGIC =====
+  const loginBtn = document.getElementById('loginBtn');
+  const signupBtn = document.getElementById('signupBtn');
+  const guestBtn = document.getElementById('guestBtn');
+  const modal = document.getElementById('authModal');
+  const closeModal = document.getElementById('closeModal');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalSubmit = document.getElementById('modal-btn');
+
+  loginBtn.addEventListener('click', () => {
+    modalTitle.textContent = "Log In";
+    modal.style.display = 'flex';
+  });
+
+  signupBtn.addEventListener('click', () => {
+    modalTitle.textContent = "Sign Up";
+    modal.style.display = 'flex';
+  });
+
+  closeModal.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+
+  window.addEventListener('click', (e) => {
+    if(e.target == modal) modal.style.display = 'none';
+  });
+
+  modalSubmit.addEventListener('click', () => {
+    const username = modal.querySelector('input[type="text"]').value;
+    const password = modal.querySelector('input[type="password"]').value;
+
+    if(username === "" || password === "") {
+      alert("Please enter both username/email and password.");
+    } else {
+      alert(`${modalTitle.textContent} Successful!`);
+      modal.style.display = 'none';
+      window.location.href = "index.html"; // Redirect to main page
+    }
+  });
+
+  guestBtn.addEventListener('click', () => {
+    window.location.href = "index.html"; // Guest redirect
+  });
+</script>
+
+</body>
+</html>
